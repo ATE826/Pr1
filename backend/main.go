@@ -24,21 +24,25 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	// Публичные маршруты
 	api := r.Group("/api")
 	api.POST("/register", server.Register)
 	api.POST("/login", server.Login)
-	api.GET("/:id", server.GetUser)
 
-	// Пример защищённых маршрутов
+	// Инженер
 	engineer := r.Group("/engineer")
 	engineer.Use(middleware.JWTMiddleware())
+	engineer.GET("/profile", server.GetCurrentUser)
 
+	// Менеджер
 	manager := r.Group("/manager")
 	manager.Use(middleware.JWTMiddleware())
 
+	// Руководитель
 	supervisor := r.Group("/supervisor")
 	supervisor.Use(middleware.JWTMiddleware())
 
+	// Работодатель
 	employer := r.Group("/employer")
 	employer.Use(middleware.JWTMiddleware())
 

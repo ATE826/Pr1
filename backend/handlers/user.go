@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *Server) GetUser(c *gin.Context) {
+func (s *Server) GetCurrentUser(c *gin.Context) {
 	id := c.Param("id")
 
 	var user models.User
