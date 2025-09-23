@@ -72,6 +72,21 @@ button{
 .register-selection{
     margin-bottom: 20px;
 }
+
+.error-message{
+    font-size: 12pt!important;
+    color: red;
+    margin-top: 0px;
+}
+
+/* Сетка 2 колонки × 3 ряда */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 30px; /* строки и колонки */
+    width: 100%;
+}
+
 select{
     width: 250px;
     height: 40px;

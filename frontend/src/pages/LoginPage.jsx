@@ -15,9 +15,12 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-
+ 
     try {
-      const response = await API.post("/login", { email, password });
+      const response = await API.post("/login", { 
+        email: email.trim(), 
+        password: password.trim(),
+      });
       localStorage.setItem("token", response.data.token);
       navigate("/home");
     } catch (err) {
@@ -36,20 +39,26 @@ export default function LoginPage() {
         <div className="login-form-container">
           <p className="login-title">Вход</p>
           <form onSubmit={handleLogin} className="login-form">
-            <FormInput
-              label="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Введите ваш email"
-            />
-            <FormInput
-              label="Пароль"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Введите ваш пароль"
-            />
+            <div className="field-container">
+              <FormInput
+                label="Email"
+                type="email"
+                name="email"
+                //value={email}
+                defaultValue={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Введите ваш email"
+              />
+              <FormInput
+                label="Пароль"
+                type="password"
+                name="password"
+                //value={password}
+                defaultValue={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Введите ваш пароль"
+              />
+            </div>
             {error && <p className="error-message">{error}</p>}
             <p>Ещё нет аккаунта?{" "}
               <Link to="/register" className="register-link">Зарегистрируйтесь!</Link>

@@ -1,21 +1,41 @@
-input{
-    margin-left: 8px;
-    width: 250px;
-    height: 30px;
-}
-.form-input{
+.form-input {
     margin-bottom: 20px;
 }
-label{
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+}
+
+label {
     font-family: GothamPro, sans-serif;
     font-size: 14pt;
+    margin-bottom: 5px;
 }
-option{
+
+input {
+    width: 100%;        /* занимает всю ширину родителя */
+    max-width: 250px;   /* ограничение ширины */
+    height: 40px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+}
+
+select {
+    width: 100%;        /* чтобы селект был такой же ширины, как инпут */
+    max-width: 250px;
+    height: 40px;
+    padding: 5px 10px;
+    font-size: 10pt;
+    box-sizing: border-box;
+    margin-bottom: 20px; /* отступ снизу */
+    border-color: rgb(118, 118, 118) !important;
+}
+
+option {
     font-size: 10pt !important;
 }
-select{
-    margin-bottom: 20px;
-    font-size: 10pt;
-    height: auto;
-    margin-left: 8px;
+
+#select-label{
+    margin-bottom: 0px;
 }

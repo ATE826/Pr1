@@ -12,9 +12,9 @@ export default function FormInput({
       <label className="form-label">{label}</label>
       <input
         type={type}
-        name={name}          // 🔹 добавил name
+        name={name}          
         value={value}
-        onChange={onChange}  // теперь handleChange будет знать, какое поле менять
+        onChange={onChange}
         placeholder={placeholder}
         className="input-field"
         required

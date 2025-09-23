@@ -2,7 +2,7 @@ import '../css/FormInput.css';
 export default function FormSelect({ label, name, value, onChange, options }) {
   return (
     <div className="form-group">
-      <label className="form-label">{label}</label>
+      <label id='select-label' className="form-label">{label}</label>
       <select
         name={name}
         value={value}
