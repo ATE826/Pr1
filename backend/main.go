@@ -37,14 +37,12 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	// Менеджер
 	manager := r.Group("/manager")
 	manager.Use(middleware.JWTMiddleware())
+	manager.GET("/profile", server.GetCurrentUser)
 
-	// Руководитель
-	supervisor := r.Group("/supervisor")
-	supervisor.Use(middleware.JWTMiddleware())
-
-	// Работодатель
-	employer := r.Group("/employer")
-	employer.Use(middleware.JWTMiddleware())
+	// Руководитель и заказчик
+	visitor := r.Group("/visitor")
+	visitor.Use(middleware.JWTMiddleware())
+	visitor.GET("/profile", server.GetCurrentUser)
 
 	return r
 }

@@ -45,9 +45,9 @@ export default function RegisterPage() {
               onChange={handleChange}
               options={[
                 { value: "engineer", label: "Инженер" },
-                { value: "employer", label: "Работодатель" },
                 { value: "manager", label: "Менеджер" },
                 { value: "leader", label: "Руководитель" },
+                { value: "visitor", label: "Заказчик" },
               ]}
             />
             <FormInput
