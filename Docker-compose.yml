@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:16
+    image: postgres:17
     container_name: postgres_container
     restart: always
     environment:
@@ -14,9 +14,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  app:
-    build: .
-    container_name: authservice
+  backend:
+    build: ./backend   # Путь к папке с Dockerfile бэка
+    container_name: backend
     depends_on:
       - db
     environment:
@@ -27,6 +27,17 @@ services:
       DB_NAME: mydb
     ports:
       - "8080:8080"
+
+  frontend:
+    build: ./frontend   # Путь к папке с фронтом
+    container_name: frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:8080  # или backend:8080 внутри сети Docker
+    command: ["npm", "start"]
 
 volumes:
   postgres_data:
