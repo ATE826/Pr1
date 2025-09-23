@@ -126,7 +126,7 @@ export default function RegisterPage() {
             {error && <p className="error-message">{error}</p>}
 
             <p className="register-text">
-              Есть аккаунт? <Link to="/login" className="login-link">Войдите!</Link>
+              Уже есть аккаунт? <Link to="/login" className="login-link">Войдите!</Link>
             </p>
 
             <button

@@ -1,0 +1,34 @@
+.home-container{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.home-container::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/Стройка.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.8) blur(3px); /* затемнение и размытие */
+    z-index: -1; /* чтобы фон был за контентом */
+}
+
+button{
+    margin-top: 20px;
+    width: 200px;
+    height: 60px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ed7009; /* Зеленый цвет */
+    color: white;
+    font-size: 14pt;
+    cursor: pointer;
+}

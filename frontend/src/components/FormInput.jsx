@@ -12,7 +12,7 @@ export default function FormInput({
       <label className="form-label">{label}</label>
       <input
         type={type}
-        name={name}          
+        name={name}       
         value={value}
         onChange={onChange}
         placeholder={placeholder}
