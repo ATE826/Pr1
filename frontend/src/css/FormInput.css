@@ -1,0 +1,21 @@
+input{
+    margin-left: 8px;
+    width: 250px;
+    height: 30px;
+}
+.form-input{
+    margin-bottom: 20px;
+}
+label{
+    font-family: GothamPro, sans-serif;
+    font-size: 14pt;
+}
+option{
+    font-size: 10pt !important;
+}
+select{
+    margin-bottom: 20px;
+    font-size: 10pt;
+    height: auto;
+    margin-left: 8px;
+}
