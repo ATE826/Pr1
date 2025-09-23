@@ -14,7 +14,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('../images/Стройка.jpeg');
+    background-image: url('../images/Стройка.jpg');
     background-size: cover;
     background-position: center;
     filter: brightness(0.8) blur(3px); /* затемнение и размытие */
@@ -74,11 +74,11 @@ button{
 }
 select{
     width: 250px;
-    height: 30px;
+    height: 40px;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
-    font-size: 14pt;
+    font-size: 10pt;
     font-family: GothamPro, sans-serif;
 }
 #role{

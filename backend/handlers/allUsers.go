@@ -9,10 +9,14 @@ import (
 )
 
 func (s *Server) GetCurrentUser(c *gin.Context) {
-	id := c.Param("id")
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "user_id not found"})
+		return
+	}
 
 	var user models.User
-	if err := s.db.First(&user, id).Error; err != nil {
+	if err := s.db.First(&user, userID).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
 		} else {
