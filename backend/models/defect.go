@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Defect struct {
 	gorm.Model
-	Name        string       `gorm:"not null" json:"name"`
+	Title       string       `gorm:"not null" json:"title"`
 	Description string       `json:"description"`
 	Priority    string       `gorm:"not null" json:"priority"`
 	EngineerID  uint         `gorm:"not null" json:"engineer_id"`

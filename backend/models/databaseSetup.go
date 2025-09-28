@@ -36,8 +36,8 @@ func Setup() (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 
-	// Автоматическая миграция (пример для сущности User)
-	if err := db.AutoMigrate(&User{}); err != nil {
+	// Автоматическая миграция
+	if err := db.AutoMigrate(&User{}, &Defect{}); err != nil {
 		return nil, fmt.Errorf("failed to migrate database: %w", err)
 	}
 

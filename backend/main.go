@@ -31,7 +31,10 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 
 	// ============ Инженер ============
 	engineer := r.Group("/engineer")
-	engineer.Use(middleware.JWTMiddleware())
+	engineer.Use(
+		middleware.JWTMiddleware(),
+		middleware.RoleMiddleware("engineer"),
+	)
 	engineer.GET("/profile", server.GetCurrentUser)
 
 	// Дефекты
@@ -43,12 +46,18 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 
 	// ============ Менеджер ============
 	manager := r.Group("/manager")
-	manager.Use(middleware.JWTMiddleware())
+	manager.Use(
+		middleware.JWTMiddleware(),
+		middleware.RoleMiddleware("manager"),
+	)
 	manager.GET("/profile", server.GetCurrentUser)
 
 	// ============ Руководитель и заказчик ============
 	visitor := r.Group("/visitor")
-	visitor.Use(middleware.JWTMiddleware())
+	visitor.Use(
+		middleware.JWTMiddleware(),
+		middleware.RoleMiddleware("visitor"),
+	)
 	visitor.GET("/profile", server.GetCurrentUser)
 
 	return r
