@@ -39,9 +39,9 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 
 	// Дефекты
 	engineer.POST("/defect", server.CreateDefect)
-	engineer.GET("/defects", server.GetDefects)
+	engineer.GET("/defects", server.GetAllDefects)
 	engineer.GET("/defect/:id", server.GetDefectByID)
-	engineer.PUT("/defect/:id", server.UpdateDefect)
+	engineer.PUT("/defect/:id", server.EditDefect)
 	engineer.DELETE("/defect/:id", server.DeleteDefect)
 
 	// ============ Менеджер ============
