@@ -30,6 +30,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	api.POST("/login", server.Login)
 
 	// ============ Инженер ============
+
 	engineer := r.Group("/engineer")
 	engineer.Use(
 		middleware.JWTMiddleware(),
@@ -37,20 +38,37 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	)
 	engineer.GET("/profile", server.GetCurrentUser)
 
+	// Объекты
+	engineer.GET("/objects", server.GetAllObjects)
+	engineer.GET("/object/:id", server.GetObjectByID)
+
 	// Дефекты
-	engineer.POST("/defect", server.CreateDefect)
-	engineer.GET("/defects", server.GetAllDefects)
-	engineer.GET("/defect/:id", server.GetDefectByID)
-	engineer.PUT("/defect/:id", server.EditDefect)
-	engineer.DELETE("/defect/:id", server.DeleteDefect)
+	engineer.POST("/oblect/defect", server.CreateDefect)
+	engineer.GET("/oblect/defects", server.GetAllDefects)
+	engineer.GET("/oblect/defect/:id", server.GetDefectByID)
+	engineer.PATCH("/oblect/defect/:id", server.EditDefectByEngineer) // Изменение названия, описания, статуса
 
 	// ============ Менеджер ============
+
 	manager := r.Group("/manager")
 	manager.Use(
 		middleware.JWTMiddleware(),
 		middleware.RoleMiddleware("manager"),
 	)
 	manager.GET("/profile", server.GetCurrentUser)
+
+	// Объекты
+	manager.POST("/object", server.CreateObject)
+	manager.GET("/objects", server.GetAllObjects)
+	manager.GET("/object/:id", server.GetObjectByID)
+	manager.PATCH("/object/:id", server.EditObject)
+	manager.DELETE("/object/:id", server.DeleteObject)
+
+	// Дефекты
+	manager.GET("/oblect/defects", server.GetAllDefects)
+	manager.GET("/oblect/defect/:id", server.GetDefectByID)
+	manager.PATCH("/oblect/defect/:id", server.EditDefectByManager) // Изменение приоритета, дедлайна
+	manager.DELETE("/oblect/defect/:id", server.DeleteDefect)
 
 	// ============ Руководитель и заказчик ============
 	visitor := r.Group("/visitor")

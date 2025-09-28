@@ -37,7 +37,7 @@ func Setup() (*gorm.DB, error) {
 	}
 
 	// Автоматическая миграция
-	if err := db.AutoMigrate(&User{}, &Defect{}); err != nil {
+	if err := db.AutoMigrate(&User{}, &Defect{}, &Object{}); err != nil {
 		return nil, fmt.Errorf("failed to migrate database: %w", err)
 	}
 

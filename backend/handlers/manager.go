@@ -9,41 +9,56 @@ import (
 	"gorm.io/gorm"
 )
 
-// ========== Дефекты ==========
+// ========== Объекты ==========
 
-func (s *Server) CreateDefect(c *gin.Context) {
-	var input DefectInput
-
+func (s *Server) CreateObject(c *gin.Context) {
+	var input ObjectInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	userID, exists := c.Get("user_id")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "user_id not found"})
-		return
-	}
-
-	defect := models.Defect{
+	object := models.Object{
 		Title:       input.Title,
 		Description: input.Description,
-		Status:      input.Status,
-		Priority:    input.Priority,
-		Deadline:    input.Deadline,
-		ObjectID:    input.ObjectID,
-		EngineerID:  userID.(uint),
+		Location:    input.Location,
+		StartDate:   input.StartDate,
+		EndDate:     input.EndDate,
+		Status:      "active",
 	}
-
-	if err := s.db.Create(&defect).Error; err != nil {
+	if err := s.db.Create(&object).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	c.JSON(http.StatusCreated, gin.H{"message": "The defect has been created", "defect_id": defect.ID, "created_by": userID})
+	c.JSON(http.StatusCreated, gin.H{"message": "The object has been created", "object_id": object.ID})
 }
 
-func (s *Server) EditDefectByEngineer(c *gin.Context) {
+func (s *Server) EditObject(c *gin.Context) {
+
+}
+
+func (s *Server) DeleteObject(c *gin.Context) {
+
+}
+
+// ========== Дефекты ==========
+
+func (s *Server) DeleteDefect(c *gin.Context) {
+	id := c.Param("id")
+	idUint, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid defect ID"})
+		return
+	}
+
+	if err := s.db.Delete(&models.Defect{}, idUint).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete defect"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "The defect has been deleted"})
+}
+
+func (s *Server) EditDefectByManager(c *gin.Context) {
 	id := c.Param("id")
 	idUint, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
@@ -67,9 +82,8 @@ func (s *Server) EditDefectByEngineer(c *gin.Context) {
 		return
 	}
 
-	defect.Title = input.Title
-	defect.Description = input.Description
-	defect.Status = input.Status
+	defect.Priority = input.Priority
+	defect.Deadline = input.Deadline
 
 	if err := s.db.Save(&defect).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update defect"})

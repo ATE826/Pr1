@@ -9,6 +9,7 @@ type Defect struct {
 	Priority    string `gorm:"not null" json:"priority"`
 	EngineerID  uint   `gorm:"not null" json:"engineer_id"`
 	Deadline    string `json:"deadline"`
+	ObjectID    uint   `gorm:"not null" json:"object_id"`
 	//Attachments []Attachment `gorm:"foreignKey:DefectID"` // <- связь один-ко-многим
 	Status string `gorm:"not null;default:'new'" json:"status"`
 }
