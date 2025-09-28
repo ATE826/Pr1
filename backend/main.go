@@ -29,17 +29,24 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	api.POST("/register", server.Register)
 	api.POST("/login", server.Login)
 
-	// Инженер
+	// ============ Инженер ============
 	engineer := r.Group("/engineer")
 	engineer.Use(middleware.JWTMiddleware())
 	engineer.GET("/profile", server.GetCurrentUser)
 
-	// Менеджер
+	// Дефекты
+	engineer.POST("/defect", server.CreateDefect)
+	engineer.GET("/defects", server.GetDefects)
+	engineer.GET("/defect/:id", server.GetDefectByID)
+	engineer.PUT("/defect/:id", server.UpdateDefect)
+	engineer.DELETE("/defect/:id", server.DeleteDefect)
+
+	// ============ Менеджер ============
 	manager := r.Group("/manager")
 	manager.Use(middleware.JWTMiddleware())
 	manager.GET("/profile", server.GetCurrentUser)
 
-	// Руководитель и заказчик
+	// ============ Руководитель и заказчик ============
 	visitor := r.Group("/visitor")
 	visitor.Use(middleware.JWTMiddleware())
 	visitor.GET("/profile", server.GetCurrentUser)
