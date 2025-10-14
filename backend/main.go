@@ -40,13 +40,13 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 
 	// Объекты
 	engineer.GET("/objects", server.GetAllObjects)
-	engineer.GET("/object/:id", server.GetObjectByID)
+	engineer.GET("/object/id/:id", server.GetObjectByID) // id объекта явно через /id/
 
-	// Дефекты
-	engineer.POST("/oblect/defect", server.CreateDefect)
-	engineer.GET("/oblect/defects", server.GetAllDefects)
-	engineer.GET("/oblect/defect/:id", server.GetDefectByID)
-	engineer.PATCH("/oblect/defect/:id", server.EditDefectByEngineer) // Изменение названия, описания, статуса
+	// Дефекты конкретного объекта
+	engineer.POST("/object/:object_id/defect", server.CreateDefect)
+	engineer.GET("/object/:object_id/defects", server.GetAllDefects)
+	engineer.GET("/object/:object_id/defect/:defect_id", server.GetDefectByID)
+	engineer.PATCH("/object/:object_id/defect/:defect_id", server.EditDefectByEngineer) // Изменение статуса, описания, названия
 
 	// ============ Менеджер ============
 
@@ -60,15 +60,15 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	// Объекты
 	manager.POST("/object", server.CreateObject)
 	manager.GET("/objects", server.GetAllObjects)
-	manager.GET("/object/:id", server.GetObjectByID)
-	manager.PATCH("/object/:id", server.EditObject)
-	manager.DELETE("/object/:id", server.DeleteObject)
+	manager.GET("/object/id/:id", server.GetObjectByID)
+	manager.PATCH("/object/id/:id", server.EditObject)
+	manager.DELETE("/object/id/:id", server.DeleteObject)
 
 	// Дефекты
-	manager.GET("/oblect/defects", server.GetAllDefects)
-	manager.GET("/oblect/defect/:id", server.GetDefectByID)
-	manager.PATCH("/oblect/defect/:id", server.EditDefectByManager) // Изменение приоритета, дедлайна
-	manager.DELETE("/oblect/defect/:id", server.DeleteDefect)
+	manager.GET("/object/:object_id/defects", server.GetAllDefects)
+	manager.GET("/object/:object_id/defect/:defect_id", server.GetDefectByID)
+	manager.PATCH("/object/:object_id/defect/:defect_id", server.EditDefectByManager)
+	manager.DELETE("/object/:object_id/defect/:defect_id", server.DeleteDefect)
 
 	// ============ Руководитель и заказчик ============
 	visitor := r.Group("/visitor")

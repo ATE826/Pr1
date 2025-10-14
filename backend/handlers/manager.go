@@ -34,35 +34,147 @@ func (s *Server) CreateObject(c *gin.Context) {
 }
 
 func (s *Server) EditObject(c *gin.Context) {
+	objectIDParam := c.Param("id")
+	objectID, err := strconv.ParseUint(objectIDParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid object ID"})
+		return
+	}
 
+	var input ObjectInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var object models.Object
+	if err := s.db.First(&object, objectID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "object not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch object"})
+		return
+	}
+
+	// Обновляем только поля, которые менеджер может менять
+	if input.Title != "" {
+		object.Title = input.Title
+	}
+	if input.Description != "" {
+		object.Description = input.Description
+	}
+	if input.Location != "" {
+		object.Location = input.Location
+	}
+	if input.StartDate != "" {
+		object.StartDate = input.StartDate
+	}
+	if input.EndDate != "" {
+		object.EndDate = input.EndDate
+	}
+	if input.Status != "" {
+		object.Status = input.Status
+	}
+
+	if err := s.db.Save(&object).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update object"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":   "Object has been updated",
+		"object_id": object.ID,
+	})
 }
 
 func (s *Server) DeleteObject(c *gin.Context) {
+	objectIDParam := c.Param("id")
+	objectID, err := strconv.ParseUint(objectIDParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid object ID"})
+		return
+	}
 
+	// Удаляем объект. Внешние ключи GORM с `OnDelete:CASCADE` удалят дефекты автоматически
+	if err := s.db.Delete(&models.Object{}, objectID).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete object"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Object has been deleted"})
 }
 
 // ========== Дефекты ==========
 
 func (s *Server) DeleteDefect(c *gin.Context) {
-	id := c.Param("id")
-	idUint, err := strconv.ParseUint(id, 10, 64)
+	objectIDParam := c.Param("object_id")
+	defectIDParam := c.Param("defect_id")
+
+	objectID, err := strconv.ParseUint(objectIDParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid object ID"})
+		return
+	}
+	defectID, err := strconv.ParseUint(defectIDParam, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid defect ID"})
 		return
 	}
 
-	if err := s.db.Delete(&models.Defect{}, idUint).Error; err != nil {
+	var defect models.Defect
+	if err := s.db.First(&defect, defectID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "defect not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch defect"})
+		return
+	}
+
+	if defect.ObjectID != uint(objectID) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "this defect does not belong to the specified object"})
+		return
+	}
+
+	if err := s.db.Delete(&defect).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete defect"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "The defect has been deleted"})
+
+	// Уменьшаем count_of_defects у объекта
+	s.db.Model(&models.Object{}).Where("id = ?", objectID).Update("count_of_defects", gorm.Expr("count_of_defects - ?", 1))
+
+	c.JSON(http.StatusOK, gin.H{"message": "Defect has been deleted"})
 }
 
 func (s *Server) EditDefectByManager(c *gin.Context) {
-	id := c.Param("id")
-	idUint, err := strconv.ParseUint(id, 10, 64)
+	objectIDParam := c.Param("object_id")
+	defectIDParam := c.Param("defect_id")
+
+	objectID, err := strconv.ParseUint(objectIDParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid object ID"})
+		return
+	}
+	defectID, err := strconv.ParseUint(defectIDParam, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid defect ID"})
+		return
+	}
+
+	var defect models.Defect
+	if err := s.db.First(&defect, defectID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "defect not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch defect"})
+		return
+	}
+
+	if defect.ObjectID != uint(objectID) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "this defect does not belong to the specified object"})
 		return
 	}
 
@@ -72,22 +184,21 @@ func (s *Server) EditDefectByManager(c *gin.Context) {
 		return
 	}
 
-	var defect models.Defect
-	if err := s.db.First(&defect, idUint).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{"error": "defect not found"})
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch defect"})
-
-		return
+	if input.Priority != "" {
+		defect.Priority = input.Priority
 	}
-
-	defect.Priority = input.Priority
-	defect.Deadline = input.Deadline
+	if input.Deadline != "" {
+		defect.Deadline = input.Deadline
+	}
 
 	if err := s.db.Save(&defect).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update defect"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "The defect has been updated"})
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":   "Defect has been updated",
+		"defect_id": defect.ID,
+		"object_id": defect.ObjectID,
+	})
 }

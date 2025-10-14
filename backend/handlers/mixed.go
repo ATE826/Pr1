@@ -10,12 +10,34 @@ import (
 )
 
 // ========== Объекты ==========
-func (s *Server) GetAllObjects(c *gin.Context) {
+func (s *Server) GetAllObjects(c *gin.Context) { // Протестировать
+	var objects []models.Object
 
+	if err := s.db.Find(&objects).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch objects"})
+		return
+	}
+	c.JSON(http.StatusOK, objects)
 }
 
-func (s *Server) GetObjectByID(c *gin.Context) {
+func (s *Server) GetObjectByID(c *gin.Context) { // Протестировать
+	id := c.Param("id")
+	idUint, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid object ID"})
+		return
+	}
 
+	var object models.Object
+	if err := s.db.First(&object, idUint).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "object not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch object"})
+		}
+		return
+	}
+	c.JSON(http.StatusOK, object)
 }
 
 func (s *Server) GetCurrentUser(c *gin.Context) {
@@ -49,31 +71,9 @@ func (s *Server) GetCurrentUser(c *gin.Context) {
 // ========== Дефекты ==========
 
 func (s *Server) GetDefectByID(c *gin.Context) {
-	id := c.Param("id")
-	idUint, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid defect ID"})
-		return
-	}
 
-	var defect models.Defect
-
-	if err := s.db.First(&defect, idUint).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusNotFound, gin.H{"error": "defect not found"})
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch defect"})
-
-		return
-	}
-	c.JSON(http.StatusOK, defect)
 }
 
 func (s *Server) GetAllDefects(c *gin.Context) {
-	var defects []models.Defect
-	if err := s.db.Find(&defects).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch defects"})
-		return
-	}
-	c.JSON(http.StatusOK, defects)
+
 }
