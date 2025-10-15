@@ -18,3 +18,14 @@ type DefectInput struct {
 	ObjectID    uint   `json:"object_id"`
 	EngineerID  uint   `json:"engineer_id"`
 }
+
+type DefectInputEditByEngineer struct {
+	Title       string `json:"title" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Status      string `json:"status" binding:"required,oneof=active completed archived"`
+}
+
+type DefectInputEditByManager struct {
+	Priority string `json:"priority" binding:"required,oneof=low medium high"`
+	Deadline string `json:"deadline" binding:"required,datetime=2006-01-02"`
+}

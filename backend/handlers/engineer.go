@@ -113,7 +113,7 @@ func (s *Server) EditDefectByEngineer(c *gin.Context) {
 	}
 
 	// Привязываем JSON
-	var input DefectInput
+	var input DefectInputEditByEngineer
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
