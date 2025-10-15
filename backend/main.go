@@ -78,6 +78,14 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	)
 	visitor.GET("/profile", server.GetCurrentUser)
 
+	// Объекты
+	visitor.GET("/objects", server.GetAllObjects)
+	visitor.GET("/object/:object_id", server.GetObjectByID)
+
+	// Дефекты
+	visitor.GET("/object/:object_id/defects", server.GetAllDefects)
+	visitor.GET("/object/:object_id/defect/:defect_id", server.GetDefectByID)
+
 	return r
 }
 
