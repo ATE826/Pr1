@@ -67,7 +67,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	// Дефекты
 	manager.GET("/object/:object_id/defects", server.GetAllDefects)
 	manager.GET("/object/:object_id/defect/:defect_id", server.GetDefectByID)
-	manager.PATCH("/object/:object_id/defect/:defect_id", server.EditDefectByManager)
+	manager.PATCH("/object/:object_id/defect/:defect_id", server.EditDefectByManager) // Изменение приоритетности и дедлайна
 	manager.DELETE("/object/:object_id/defect/:defect_id", server.DeleteDefect)
 
 	// ============ Руководитель и заказчик ============

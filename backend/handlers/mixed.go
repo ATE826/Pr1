@@ -71,9 +71,40 @@ func (s *Server) GetCurrentUser(c *gin.Context) {
 // ========== Дефекты ==========
 
 func (s *Server) GetDefectByID(c *gin.Context) {
+	objectID := c.Param("object_id")
+	defectID := c.Param("defect_id")
 
+	objectIDUint, err := strconv.ParseUint(objectID, 10, 64)
+	defectIDUint, err2 := strconv.ParseUint(defectID, 10, 64)
+	if err != nil || err2 != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
+		return
+	}
+
+	var defect models.Defect
+	if err := s.db.Where("id = ? AND object_id = ?", defectIDUint, objectIDUint).First(&defect).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "defect not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch defect"})
+		}
+		return
+	}
+	c.JSON(http.StatusOK, defect)
 }
 
 func (s *Server) GetAllDefects(c *gin.Context) {
+	objectID := c.Param("object_id")
+	objectIDUint, err := strconv.ParseUint(objectID, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid object ID"})
+		return
+	}
 
+	var defects []models.Defect
+	if err := s.db.Where("object_id = ?", objectIDUint).Find(&defects).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch defects"})
+		return
+	}
+	c.JSON(http.StatusOK, defects)
 }
