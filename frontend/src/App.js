@@ -5,19 +5,36 @@ import HomePage from "./pages/HomePage";
 import { useState } from "react";
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setTokenState] = useState(localStorage.getItem("token"));
+
+  const setToken = (newToken) => {
+    if (newToken) {
+      localStorage.setItem("token", newToken);
+      setTokenState(newToken);
+    } else {
+      localStorage.removeItem("token");
+      setTokenState(null);
+    }
+  };
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+
+        {/* Передаём setToken сюда */}
+        <Route path="/login" element={<LoginPage setToken={setToken} />} />
+        <Route path="/register" element={<RegisterPage setToken={setToken} />} />
+
+        {/* Передаём setToken и сюда (для logout) */}
         <Route
           path="/home"
-          element={token ? <HomePage /> : <Navigate to="/login" />}
+          element={
+            token ? <HomePage setToken={setToken} /> : <Navigate to="/login" />
+          }
         />
-        /* Добавить другие защищенные маршруты здесь */
+
+        {/* Добавить другие защищенные маршруты здесь */}
       </Routes>
     </BrowserRouter>
   );

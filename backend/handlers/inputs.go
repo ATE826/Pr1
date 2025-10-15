@@ -15,6 +15,6 @@ type DefectInput struct {
 	Status      string `json:"status" binding:"required,oneof=new in_progress checking canceled completed"`
 	Priority    string `json:"priority" binding:"required,oneof=low medium high"`
 	Deadline    string `json:"deadline" binding:"required,datetime=2006-01-02"`
-	ObjectID    uint   `json:"object_id" binding:"required"`
-	EngineerID  uint   `json:"engineer_id" binding:"required"`
+	ObjectID    uint   `json:"object_id"`
+	EngineerID  uint   `json:"engineer_id"`
 }

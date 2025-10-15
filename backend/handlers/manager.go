@@ -34,7 +34,7 @@ func (s *Server) CreateObject(c *gin.Context) {
 }
 
 func (s *Server) EditObject(c *gin.Context) {
-	objectIDParam := c.Param("id")
+	objectIDParam := c.Param("object_id")
 	objectID, err := strconv.ParseUint(objectIDParam, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid object ID"})
@@ -89,7 +89,7 @@ func (s *Server) EditObject(c *gin.Context) {
 }
 
 func (s *Server) DeleteObject(c *gin.Context) {
-	objectIDParam := c.Param("id")
+	objectIDParam := c.Param("object_id")
 	objectID, err := strconv.ParseUint(objectIDParam, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid object ID"})

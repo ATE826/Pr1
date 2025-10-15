@@ -40,7 +40,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 
 	// Объекты
 	engineer.GET("/objects", server.GetAllObjects)
-	engineer.GET("/object/id/:id", server.GetObjectByID) // id объекта явно через /id/
+	engineer.GET("/object/:object_id", server.GetObjectByID)
 
 	// Дефекты конкретного объекта
 	engineer.POST("/object/:object_id/defect", server.CreateDefect)
@@ -60,9 +60,9 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	// Объекты
 	manager.POST("/object", server.CreateObject)
 	manager.GET("/objects", server.GetAllObjects)
-	manager.GET("/object/id/:id", server.GetObjectByID)
-	manager.PATCH("/object/id/:id", server.EditObject)
-	manager.DELETE("/object/id/:id", server.DeleteObject)
+	manager.GET("/object/:object_id", server.GetObjectByID)
+	manager.PATCH("/object/:object_id", server.EditObject)
+	manager.DELETE("/object/:object_id", server.DeleteObject)
 
 	// Дефекты
 	manager.GET("/object/:object_id/defects", server.GetAllDefects)

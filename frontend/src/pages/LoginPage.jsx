@@ -4,7 +4,7 @@ import API from "../api";
 import '../css/LoginPage.css';
 import FormInput from "../components/FormInput";
 
-export default function LoginPage() {
+export default function LoginPage({ setToken }) { // <── получаем setToken из App.js
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,20 +15,22 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
- 
+
     try {
       const response = await API.post("/login", { 
         email: email.trim(), 
         password: password.trim(),
       });
-      localStorage.setItem("token", response.data.token);
+
+      // вместо прямого обращения к localStorage:
+      setToken(response.data.token); // <── сохраняем токен централизованно
       navigate("/home");
     } catch (err) {
       setError("Неверный email или пароль");
       setEmail("");
       setPassword("");
       console.error(err);
-    } finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -45,8 +47,7 @@ export default function LoginPage() {
                 type="email"
                 name="email"
                 autoComplete="new-password"
-                //value={email}
-                defaultValue={email}
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Введите ваш email"
               />
@@ -55,15 +56,17 @@ export default function LoginPage() {
                 type="password"
                 name="password"
                 autoComplete="new-password"
-                //value={password}
-                defaultValue={password}
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Введите ваш пароль"
               />
             </div>
             {error && <p className="error-message">{error}</p>}
-            <p>Ещё нет аккаунта?{" "}
-              <Link to="/register" className="register-link">Зарегистрируйтесь!</Link>
+            <p>
+              Ещё нет аккаунта?{" "}
+              <Link to="/register" className="register-link">
+                Зарегистрируйтесь!
+              </Link>
             </p>
             <button type="submit" className="login-button">
               {isLoading ? "Вход..." : "Войти"}
