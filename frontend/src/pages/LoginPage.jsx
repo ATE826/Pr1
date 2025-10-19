@@ -34,12 +34,8 @@ export default function LoginPage({ setToken }) {
       const role = payload.role;
       localStorage.setItem("role", role);
 
-      // Редирект на профиль в зависимости от роли
-      if (role === "engineer") navigate("/engineer/profile");
-      else if (role === "manager") navigate("/manager/profile");
-      else if (role === "visitor") navigate("/visitor/profile");
-      else if (role === "leader") navigate("/leader/profile");
-      else navigate("/");
+      // Редирект на профиль
+      navigate("/profile");
 
     } catch (err) {
       console.error(err);

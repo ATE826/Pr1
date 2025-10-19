@@ -6,9 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
 // Профили по ролям
-import EngineerProfile from "./pages/EngineerProfile";
-import ManagerProfile from "./pages/ManagerProfile";
-import VisitorProfile from "./pages/VisitorProfile";
+import Profile from "./pages/Profile";
 
 function App() {
   // Токен авторизации
@@ -44,26 +42,10 @@ function App() {
 
         {/* Защищённые страницы профиля */}
         <Route
-          path="/engineer/profile"
+          path="/profile"
           element={
             <ProtectedRoute>
-              <EngineerProfile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/manager/profile"
-          element={
-            <ProtectedRoute>
-              <ManagerProfile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/visitor/profile"
-          element={
-            <ProtectedRoute>
-              <VisitorProfile />
+              <Profile />
             </ProtectedRoute>
           }
         />

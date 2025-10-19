@@ -36,7 +36,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 		middleware.JWTMiddleware(),
 		middleware.RoleMiddleware("engineer"),
 	)
-	engineer.GET("/profile", server.GetCurrentUser)
+	//engineer.GET("/profile", server.GetCurrentUser)
 
 	// Объекты
 	engineer.GET("/objects", server.GetAllObjects)
@@ -55,7 +55,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 		middleware.JWTMiddleware(),
 		middleware.RoleMiddleware("manager"),
 	)
-	manager.GET("/profile", server.GetCurrentUser)
+	//manager.GET("/profile", server.GetCurrentUser)
 
 	// Объекты
 	manager.POST("/object", server.CreateObject)
@@ -76,7 +76,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 		middleware.JWTMiddleware(),
 		middleware.RoleMiddleware("visitor"),
 	)
-	visitor.GET("/profile", server.GetCurrentUser)
+	//visitor.GET("/profile", server.GetCurrentUser)
 
 	// Объекты
 	visitor.GET("/objects", server.GetAllObjects)
@@ -92,7 +92,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 		middleware.JWTMiddleware(),
 		middleware.RoleMiddleware("leader"),
 	)
-	leader.GET("/profile", server.GetCurrentUser)
+	//leader.GET("/profile", server.GetCurrentUser)
 
 	// Объекты
 	leader.GET("/objects", server.GetAllObjects)
@@ -101,6 +101,12 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	// Дефекты
 	leader.GET("/object/:object_id/defects", server.GetAllDefects)
 	leader.GET("/object/:object_id/defect/:defect_id", server.GetDefectByID)
+
+	// ============ Профиль ============
+
+	profile := r.Group("/profile")
+	profile.Use(middleware.JWTMiddleware()) // только проверка токена
+	profile.GET("", server.GetCurrentUser)
 
 	return r
 }
