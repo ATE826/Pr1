@@ -70,7 +70,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	manager.PATCH("/object/:object_id/defect/:defect_id", server.EditDefectByManager) // Изменение приоритетности и дедлайна
 	manager.DELETE("/object/:object_id/defect/:defect_id", server.DeleteDefect)
 
-	// ============ Руководитель и заказчик ============
+	// ============ Заказчик ============
 	visitor := r.Group("/visitor")
 	visitor.Use(
 		middleware.JWTMiddleware(),
@@ -85,6 +85,22 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	// Дефекты
 	visitor.GET("/object/:object_id/defects", server.GetAllDefects)
 	visitor.GET("/object/:object_id/defect/:defect_id", server.GetDefectByID)
+
+	// ============ Руководитель ============
+	leader := r.Group("/leader")
+	leader.Use(
+		middleware.JWTMiddleware(),
+		middleware.RoleMiddleware("leader"),
+	)
+	leader.GET("/profile", server.GetCurrentUser)
+
+	// Объекты
+	leader.GET("/objects", server.GetAllObjects)
+	leader.GET("/object/:object_id", server.GetObjectByID)
+
+	// Дефекты
+	leader.GET("/object/:object_id/defects", server.GetAllDefects)
+	leader.GET("/object/:object_id/defect/:defect_id", server.GetDefectByID)
 
 	return r
 }

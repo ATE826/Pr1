@@ -38,6 +38,7 @@ export default function LoginPage({ setToken }) {
       if (role === "engineer") navigate("/engineer/profile");
       else if (role === "manager") navigate("/manager/profile");
       else if (role === "visitor") navigate("/visitor/profile");
+      else if (role === "leader") navigate("/leader/profile");
       else navigate("/");
 
     } catch (err) {

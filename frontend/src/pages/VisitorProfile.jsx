@@ -4,30 +4,42 @@ import API from "../api";
 export default function VisitorProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) throw new Error("Нет токена авторизации");
+
         const response = await API.get("/visitor/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUser(response.data);
+
+        if (!response.data || Object.keys(response.data).length === 0) {
+          setError("Пользователь не найден");
+          setUser(null);
+        } else {
+          setUser(response.data);
+        }
       } catch (err) {
         console.error(err);
+        setError("Ошибка при получении данных пользователя");
+        setUser(null);
       } finally {
         setLoading(false);
       }
     };
+
     fetchUser();
   }, []);
 
   if (loading) return <p>Загрузка...</p>;
-  if (!user) return <p>Пользователь не найден</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div>
-      <h1>Профиль пользователя</h1>
+      <h1>Профиль заказчика</h1>
       <p>Имя: {user.first_name}</p>
       <p>Фамилия: {user.last_name}</p>
       <p>Отчество: {user.patronymic}</p>
