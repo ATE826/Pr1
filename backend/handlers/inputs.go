@@ -1,7 +1,7 @@
 package handlers
 
 type RegisterInput struct {
-	Role       string `json:"role" binding:"required,oneof=engineer manager visitor"`
+	Role       string `json:"role" binding:"required,oneof=engineer manager visitor leader"`
 	FirstName  string `json:"first_name" binding:"required"`
 	LastName   string `json:"last_name" binding:"required"`
 	Patronymic string `json:"patronymic"`
