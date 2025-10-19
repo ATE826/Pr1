@@ -58,7 +58,11 @@ p{
     font-family: GothamPro, sans-serif;
 }
 
-button{
+.login-link {
+    font-size: 14pt !important;
+}
+
+.login-button{
     margin-top: 20px;
     width: 200px;
     height: 60px;

@@ -1,18 +1,228 @@
+/* Основной контейнер с фоном */
 .profile-container {
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background: #f9f9f9;
-  font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
 }
 
-.profile-container h1 {
-  text-align: center;
-  margin-bottom: 20px;
+.profile-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/Стройка.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.8) blur(3px);
+    z-index: -1;
 }
 
-.profile-container p {
-  margin: 5px 0;
+/* Контейнер карточки */
+.profile-content {
+    position: relative;
+    z-index: 1;
+    border-radius: 10px;
+}
+
+/* Карточка профиля */
+.profile-card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    height: 100vh;
+    width: 80%;
+    max-width: 1200px;
+    min-width: 300px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-image: url('../images/VaultBoy.jpg');
+    background-size: 35%;       /* уменьшает размер изображения до 50% от его оригинала */
+    background-repeat: no-repeat; /* предотвращает повторение */
+    background-position: center bottom; /* центрирует изображение */
+}
+
+/* Navbar */
+.navbar-container {
+    width: 100%;
+    height: 10vh;
+    background-color: #FEB203;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 33px 33px;
+}
+
+.navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.navbar-content a,
+.navbar-content p {
+    text-decoration: none;
+    color: #000;
+}
+
+/* Контент карточки */
+.profile-body {
+    padding: 20px;
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.pageName{
+    font-size: 40pt;
+}
+
+.hrefToPage {
+    font-size: 24pt;
+}
+
+.user-all-nfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 50px;
+}
+
+.user-info {
+    background-color: #FEB203;
+    border-radius: 23px;
+    font-size: 24pt;
+    height: 5vh;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Кнопки*/
+.logout-button{
+    width: 197px;
+    height: 78px;
+    border: none;
+    border-radius: 23px;
+    background-color: #F60000;
+    color: white;
+    font-size: 24pt;
+    cursor: pointer;
+}
+
+.edit-profile-button{
+    width: 197px;
+    height: 78px;
+    border: none;
+    border-radius: 23px;
+    background-color: #FEB203;
+    color: #000;
+    font-size: 24pt;
+    cursor: pointer;
+}
+
+.btns{
+  margin-top: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40%;
+}
+
+.logout-button{
+    width: 157px;
+    height: 58px;
+    border: none;
+    border-radius: 23px;
+    background-color: #F60000;
+    color: white;
+    font-size: 16pt;
+    cursor: pointer;
+}
+
+.edit-profile-button{
+    width: 157px;
+    height: 58px;
+    border: none;
+    border-radius: 23px;
+    background-color: #FEB203;
+    color: #000;
+    font-size: 16pt;
+    cursor: pointer;
+}
+
+/* Адаптивный дизайн */
+@media (max-width: 1024px) {
+    .profile-card-container {
+        width: 90%;
+    }
+
+    .navbar-content {
+        width: 90%;
+    }
+
+    .btns{
+      gap: 30%;
+    }
+
+    .pageName{
+    font-size: 35pt;
+    }
+
+    .hrefToPage {
+        font-size: 19pt;
+    }
+
+    .info-container p {
+        font-size: 18pt;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-card-container {
+        width: 95%;
+    }
+
+    .navbar-content a,
+    .navbar-content h2 {
+        font-size: 16px;
+    }
+
+    .pageName{
+    font-size: 30pt;
+    }
+
+    .hrefToPage {
+        font-size: 14pt;
+    }
+
+    .btns{
+      gap: 10%;
+    }
+
+    .info-container p {
+        font-size: 12pt;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .pageName{
+    font-size: 20pt;
+    }
+
+    .hrefToPage {
+        font-size: 9pt;
+    }
 }

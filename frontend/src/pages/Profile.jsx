@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
 import API from "../api";
+import '../css/ProfilePage.css';
+import { useNavigate } from "react-router-dom";
 
 export default function EngineerProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // удаляем токен
+    navigate("/login"); // перенаправляем на страницу входа
+  };
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -38,13 +48,37 @@ export default function EngineerProfile() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
-      <h1>Профиль {user.role}а</h1>
-      <p>Имя: {user.first_name}</p>
-      <p>Фамилия: {user.last_name}</p>
-      <p>Отчество: {user.patronymic}</p>
-      <p>Email: {user.email}</p>
-      <p>Роль: {user.role}</p>
+    <div className="profile-container">
+      <div className="profile-content">
+        <div className="profile-card-container">
+          <div className="navbar-container">
+            <div className="navbar-content">
+              <a className="hrefToPage" href="">Дефекты</a>
+              <p className="pageName">Профиль</p>
+              <a className="hrefToPage" href="">Объекты</a>
+            </div>
+          </div>
+          <div className="profile-body">
+            <div className="info-container">
+              <p>
+                Добро пожаловать в центр контроля строительных дефектов — регистрация, назначение и контроль статусов происходят легко, а отчётность формируется автоматически для руководства: прозрачность процессов, контроль на каждом этапе и стройка без сюрпризов!
+              </p>
+              <div className="user-all-nfo">
+                <div className="user-info"><p>Имя: {user.first_name}</p></div>
+                <div className="user-info"><p>Фамилия: {user.last_name}</p></div>
+                <div className="user-info"><p>Отчество: {user.patronymic}</p></div>
+                <div className="user-info"><p>Email: {user.email}</p></div>
+                <div className="user-info"><p>Должность: {user.role}</p></div>
+              </div>
+            </div>
+            <div className="btns">
+              <button className="edit-profile-button">Изменить</button>
+              <button className="logout-button" onClick={handleLogout}>Выйти</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

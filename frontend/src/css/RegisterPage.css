@@ -57,7 +57,11 @@ p{
     font-family: GothamPro, sans-serif;
 }
 
-button{
+.register-link {
+    font-size: 14pt !important;
+}
+
+.register-button{
     margin-top: 20px;
     width: 200px;
     height: 60px;
