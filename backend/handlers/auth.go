@@ -9,20 +9,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type RegisterInput struct {
-	Role       string `json:"role" binding:"required,oneof=engineer manager visitor"`
-	FirstName  string `json:"first_name" binding:"required"`
-	LastName   string `json:"last_name" binding:"required"`
-	Patronymic string `json:"patronymic"`
-	Email      string `json:"email" binding:"required,email"`
-	Password   string `json:"password" binding:"required,min=6"`
-}
-
-type LoginInput struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
-}
-
 func (s *Server) Register(c *gin.Context) {
 	var input RegisterInput
 
@@ -103,5 +89,16 @@ func (s *Server) Login(c *gin.Context) {
 	}
 
 	// Успешный ответ
-	c.JSON(http.StatusOK, gin.H{"ID:": user.ID, "token": token})
+	c.JSON(http.StatusOK, gin.H{
+		"token": token,
+		"user": gin.H{
+			"id":         user.ID,
+			"role":       user.Role,
+			"first_name": user.FirstName,
+			"last_name":  user.LastName,
+			"patronymic": user.Patronymic,
+			"email":      user.Email,
+			"created_at": user.CreatedAt,
+		},
+	})
 }

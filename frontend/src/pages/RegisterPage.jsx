@@ -40,23 +40,21 @@ export default function RegisterPage() {
     setIsLoading(true);
     setError("");
 
-    // Дополнительная проверка перед отправкой
     if (form.password.length < 6) {
       setPasswordError("Пароль должен быть не меньше 6 символов");
+      setIsLoading(false);
       return;
     }
 
     try {
-      await API.post("/register", form);
+      await API.post("/api/register", form); // Регистрация через /api/register
       navigate("/login");
     } catch (err) {
-      setError("Данный пользователь уже существует");
       console.error(err);
-      setForm({
-        ...form,
-        email: "",
-        password: "",
-      });
+      setError("Данный пользователь уже существует");
+      setForm({ ...form, email: "", password: "" });
+    } finally {
+      setIsLoading(false);
     }
   };
 

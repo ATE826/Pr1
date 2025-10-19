@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../api";
-import '../css/LoginPage.css';
+import "../css/LoginPage.css";
 import FormInput from "../components/FormInput";
 
-export default function LoginPage({ setToken }) { // <── получаем setToken из App.js
+export default function LoginPage({ setToken }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,19 +17,34 @@ export default function LoginPage({ setToken }) { // <── получаем se
     setError("");
 
     try {
-      const response = await API.post("/login", { 
-        email: email.trim(), 
+      const response = await API.post("/api/login", {  // Логин через /api/login
+        email: email.trim(),
         password: password.trim(),
       });
 
-      // вместо прямого обращения к localStorage:
-      setToken(response.data.token); // <── сохраняем токен централизованно
-      navigate("/home");
+      const { token } = response.data;
+      if (!token) throw new Error("Некорректный ответ сервера");
+
+      // Сохраняем токен
+      setToken(token);
+      localStorage.setItem("token", token);
+
+      // Извлекаем роль из payload JWT
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const role = payload.role;
+      localStorage.setItem("role", role);
+
+      // Редирект на профиль в зависимости от роли
+      if (role === "engineer") navigate("/engineer/profile");
+      else if (role === "manager") navigate("/manager/profile");
+      else if (role === "visitor") navigate("/visitor/profile");
+      else navigate("/");
+
     } catch (err) {
+      console.error(err);
       setError("Неверный email или пароль");
       setEmail("");
       setPassword("");
-      console.error(err);
     } finally {
       setIsLoading(false);
     }
