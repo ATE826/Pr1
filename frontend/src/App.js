@@ -8,6 +8,7 @@ import RegisterPage from "./pages/RegisterPage";
 // Защищённые страницы
 import Profile from "./pages/Profile";
 import Objects from "./pages/ObjectsPage";
+import Defects from "./pages/DefectsPage";
 
 function App() {
   const [token, setTokenState] = useState(localStorage.getItem("token"));
@@ -56,6 +57,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Objects />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/:role/object/:id"
+          element={
+            <ProtectedRoute>
+              <Defects />
             </ProtectedRoute>
           }
         />

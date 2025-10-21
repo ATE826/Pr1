@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import API from "../api";
 import "../css/ProfilePage.css";
-import { useNavigate, Link } from "react-router-dom";
+import "../css/ObjectsPage.css";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 export default function ObjectsPage() {
   const [objects, setObjects] = useState([]);
@@ -9,17 +12,10 @@ export default function ObjectsPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const role = localStorage.getItem("role"); // роль пользователя
-  const token = localStorage.getItem("token"); // токен
+  const role = localStorage.getItem("role"); 
+  const token = localStorage.getItem("token");
 
-  const goToProfile = () => {
-    if (!token || !role) {
-      navigate("/login");
-    } else {
-      navigate(`/${role}/profile`);
-    }
-  };
-
+  // Подгрузка объектов
   useEffect(() => {
     const fetchObjects = async () => {
       try {
@@ -43,6 +39,7 @@ export default function ObjectsPage() {
   }, [token, role]);
 
   if (loading) return <p>Загрузка...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="profile-container">
@@ -54,23 +51,48 @@ export default function ObjectsPage() {
               <Link className="hrefToPage" to={`/${role}/profile`}>Профиль</Link>
             </div>
           </div>
+
           <div className="profile-body">
-            {objects.length === 0 ? (
-              <p>Объектов пока нет</p>
-            ) : (
-              <div className="objects-list">
-                {objects.map((obj) => (
-                  <div key={obj.id} className="object-card">
-                    <h3>{obj.name}</h3>
-                    <p>{obj.description}</p>
-                    <Link to={`/${role}/object/${obj.id}`}>
-                      Перейти к объекту
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="objects-table">
+              {objects.length === 0 ? (
+                <p>Объектов пока нет</p>
+              ) : (
+                <div className="objects-list">
+                  {objects.map((obj) => (
+                    <div
+                      key={obj.id}
+                      className="object-card"
+                      onClick={() => navigate(`/${role}/object/${obj.ID}`)}
+                    >
+                      <div>
+                        <h3>{obj.title}</h3>
+                        <h4 className="title">{obj.status}</h4>
+                        <p>{obj.description}</p>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="button">
+              <button
+                className="add-button"
+                onClick={() => {
+                  const role = localStorage.getItem("role");
+                  if (role !== "manager") {
+                    alert("У Вас нет прав на выпонение этого действия.");
+                    return;
+                  }
+                  // Если роль manager — переход на страницу добавления объекта
+                  navigate(`/${role}/add-object`);
+                }}
+              >
+                Добавить объект
+              </button>
+            </div>
           </div>
+
         </div>
       </div>
     </div>

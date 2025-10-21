@@ -36,11 +36,70 @@
     width: 500% ;
 }
 
-.object-list {
-    padding: 20px;
-    margin-top: 20px;
+.objects-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.object-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 80%;
+  background-color: #FEB203;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.object-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.object-card h3 {
+  margin: 0 0 8px 0;
+}
+
+.object-card p {
+  font-size: 14px;
+  color: #000000;
+}
+
+
+.objects-table {
+    max-height: 50vh;   /* Ограничиваем высоту блока */
+    overflow-y: auto;   /* Вертикальная прокрутка */
+    padding: 10px;      /* Можно оставить для отступов */
+    border-radius: 8px;
+    margin-top: -2vh;
+}
+
+.title{
+    margin: -0.5vh;
+}
+
+.add-button{
+    width: 197px;
+    height: 78px;
+    border: none;
+    border-radius: 23px;
+    background-color: #FEB203;
+    color: #000;
+    font-size: 14pt;
+    cursor: pointer;
+    margin-top: 100px;
+    margin-right: 5%;
+}
+
+.button{
     width: 100%;
-    text-align: center;
     display: flex;
+    justify-content: end;
+    align-items: center;
     
 }
+

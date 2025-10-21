@@ -24,6 +24,15 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	// CSRF middleware
+	// r.Use(csrf.Middleware(csrf.Options{
+	// 	Secret: os.Getenv("CSRF_SECRET"), // добавить в .env
+	// 	ErrorFunc: func(c *gin.Context) {
+	// 		c.JSON(400, gin.H{"error": "CSRF token mismatch"})
+	// 		c.Abort()
+	// 	},
+	// }))
+
 	// Публичные маршруты
 	api := r.Group("/api")
 	api.POST("/register", server.Register)

@@ -20,7 +20,7 @@ func (s *Server) GetAllObjects(c *gin.Context) { // Протестировать
 	c.JSON(http.StatusOK, objects)
 }
 
-func (s *Server) GetObjectByID(c *gin.Context) { // Протестировать
+func (s *Server) GetObjectByID(c *gin.Context) {
 	id := c.Param("object_id")
 	idUint, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
