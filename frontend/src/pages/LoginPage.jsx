@@ -17,26 +17,21 @@ export default function LoginPage({ setToken }) {
     setError("");
 
     try {
-      const response = await API.post("/api/login", {  // Логин через /api/login
+      const response = await API.post("/api/login", {
         email: email.trim(),
         password: password.trim(),
       });
 
-      const { token } = response.data;
-      if (!token) throw new Error("Некорректный ответ сервера");
+      const { token, user } = response.data;
+      if (!token || !user?.role) throw new Error("Некорректный ответ сервера");
 
-      // Сохраняем токен
-      setToken(token);
-      localStorage.setItem("token", token);
+      const role = user.role;
 
-      // Извлекаем роль из payload JWT
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const role = payload.role;
-      localStorage.setItem("role", role);
+      // Сохраняем токен и роль
+      setToken(token, role);
 
-      // Редирект на профиль
-      navigate("/profile");
-
+      // Редирект на профиль с ролью
+      navigate(`/${role}/profile`);
     } catch (err) {
       console.error(err);
       setError("Неверный email или пароль");

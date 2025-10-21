@@ -5,28 +5,30 @@ import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
-// Профили по ролям
+// Защищённые страницы
 import Profile from "./pages/Profile";
+import Objects from "./pages/ObjectsPage";
 
 function App() {
-  // Токен авторизации
   const [token, setTokenState] = useState(localStorage.getItem("token"));
+  const [role, setRoleState] = useState(localStorage.getItem("role"));
 
-  // Функция для установки токена (используется на LoginPage)
-  const setToken = (newToken) => {
-    if (newToken) {
+  const setToken = (newToken, newRole) => {
+    if (newToken && newRole) {
       localStorage.setItem("token", newToken);
+      localStorage.setItem("role", newRole);
       setTokenState(newToken);
+      setRoleState(newRole);
     } else {
       localStorage.removeItem("token");
+      localStorage.removeItem("role");
       setTokenState(null);
+      setRoleState(null);
     }
   };
 
-  // === ProtectedRoute прямо здесь ===
-  // Защищает маршруты от неавторизованных пользователей
   const ProtectedRoute = ({ children }) => {
-    if (!token) return <Navigate to="/login" />;
+    if (!token || !role) return <Navigate to="/login" />;
     return children;
   };
 
@@ -40,12 +42,20 @@ function App() {
         <Route path="/login" element={<LoginPage setToken={setToken} />} />
         <Route path="/register" element={<RegisterPage setToken={setToken} />} />
 
-        {/* Защищённые страницы профиля */}
+        {/* Защищённые маршруты */}
         <Route
-          path="/profile"
+          path="/:role/profile"
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/:role/objects"
+          element={
+            <ProtectedRoute>
+              <Objects />
             </ProtectedRoute>
           }
         />
