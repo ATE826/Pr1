@@ -116,6 +116,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	profile := r.Group("/profile")
 	profile.Use(middleware.JWTMiddleware()) // только проверка токена
 	profile.GET("", server.GetCurrentUser)
+	profile.PATCH("/edit", server.EditCurrentUser)
 
 	return r
 }

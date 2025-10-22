@@ -14,6 +14,12 @@ type LoginInput struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type ProfileEdit struct {
+	FirstName  string `json:"first_name" binding:"required"`
+	LastName   string `json:"last_name" binding:"required"`
+	Patronymic string `json:"patronymic"`
+}
+
 type ObjectInput struct {
 	Title       string `json:"title" binding:"required"`
 	Description string `json:"description"`

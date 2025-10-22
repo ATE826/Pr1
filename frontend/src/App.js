@@ -7,8 +7,10 @@ import RegisterPage from "./pages/RegisterPage";
 
 // Защищённые страницы
 import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfilePage";
 import Objects from "./pages/ObjectsPage";
 import Defects from "./pages/DefectsPage";
+import AddObject from "./pages/AddObjectPage"
 
 function App() {
   const [token, setTokenState] = useState(localStorage.getItem("token"));
@@ -53,6 +55,14 @@ function App() {
           }
         />
         <Route
+          path="/:role/profile/edit"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/:role/objects"
           element={
             <ProtectedRoute>
@@ -65,6 +75,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Defects />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/:role/object/add-object"
+          element={
+            <ProtectedRoute>
+              <AddObject />
             </ProtectedRoute>
           }
         />

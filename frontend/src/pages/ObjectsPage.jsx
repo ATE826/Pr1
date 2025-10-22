@@ -85,7 +85,7 @@ export default function ObjectsPage() {
                     return;
                   }
                   // Если роль manager — переход на страницу добавления объекта
-                  navigate(`/${role}/add-object`);
+                  navigate(`/${role}/object/add-object`);
                 }}
               >
                 Добавить объект

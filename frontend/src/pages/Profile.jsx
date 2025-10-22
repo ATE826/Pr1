@@ -69,7 +69,7 @@ export default function Profile() {
               </div>
             </div>
             <div className="btns">
-              <button className="edit-profile-button">Изменить</button>
+              <button className="edit-profile-button" onClick={() => navigate(`/${role}/profile/edit`)}>Изменить</button>
               <button className="logout-button" onClick={handleLogout}>Выйти</button>
             </div>
           </div>
