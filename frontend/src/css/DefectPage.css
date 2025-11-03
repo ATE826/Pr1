@@ -1,0 +1,26 @@
+.object-details{
+    margin-top: -50px;
+}
+
+.defect-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.defect-body {
+    padding: 20px;
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.defect-details{
+    margin-left: 5%;
+}

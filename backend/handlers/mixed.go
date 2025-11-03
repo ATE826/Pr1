@@ -29,7 +29,8 @@ func (s *Server) GetObjectByID(c *gin.Context) {
 	}
 
 	var object models.Object
-	if err := s.db.First(&object, idUint).Error; err != nil {
+	// Вот ключевое — Preload для дефектов
+	if err := s.db.Preload("Defects").First(&object, idUint).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"error": "object not found"})
 		} else {
@@ -37,6 +38,7 @@ func (s *Server) GetObjectByID(c *gin.Context) {
 		}
 		return
 	}
+
 	c.JSON(http.StatusOK, object)
 }
 

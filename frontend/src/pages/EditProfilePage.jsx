@@ -108,13 +108,7 @@ export default function EditProfilePage() {
                 value={user.patronymic}
                 onChange={handleChange}
               />
-              <input
-                type="text"
-                name="email"
-                placeholder="Почта"
-                value={user.email}
-                onChange={handleChange}
-              />
+              
             </div>
             <div className="btns">
               <button
