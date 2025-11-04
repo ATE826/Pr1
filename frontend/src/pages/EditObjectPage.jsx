@@ -165,7 +165,7 @@ export default function EditObjectPage() {
                 <div>
                     <button
                     className="logout-button"
-                    onClick={() => navigate(`/${role}/objects`)}
+                    onClick={() => navigate(`/${role}/object/${id}`)}
                     >
                     Отмена
                     </button>
