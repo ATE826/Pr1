@@ -67,6 +67,7 @@ export default function ObjectsPage() {
                       <div>
                         <h3>{obj.title}</h3>
                         <h4 className="title">{obj.status}</h4>
+
                       </div>
 
                     </div>

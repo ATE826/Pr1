@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../api";
+import { saveAs } from "file-saver";
 import "../css/ObjectsPage.css";
 import "../css/ProfilePage.css";
 import "../css/DefectPage.css";
@@ -11,8 +12,8 @@ export default function ObjectPage() {
   const [defects, setDefects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [search, setSearch] = useState(""); // поиск по названию
-  const [statusFilter, setStatusFilter] = useState(""); // фильтр по статусу
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -21,13 +22,11 @@ export default function ObjectPage() {
       try {
         if (!token || !role) throw new Error("Нет токена или роли");
 
-        // Получаем объект
         const objRes = await API.get(`/${role}/object/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setObject(objRes.data);
 
-        // Получаем дефекты
         const defectsRes = await API.get(`/${role}/object/${id}/defects`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -43,15 +42,51 @@ export default function ObjectPage() {
     fetchData();
   }, [id, role, token]);
 
-  if (loading) return <p>Загрузка...</p>;
-  if (error) return <p>{error}</p>;
-
-  // Фильтрация и поиск дефектов
   const filteredDefects = defects.filter((defect) => {
     const matchesSearch = defect.title.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter ? defect.status === statusFilter : true;
     return matchesSearch && matchesStatus;
   });
+
+  const exportCSV = () => {
+  if (!object) return;
+
+  let csvContent = "";
+
+  // Заголовки объекта
+  csvContent += "ID объекта;Название;Статус;Описание;Местоположение;Начало;Окончание\n";
+  csvContent += [
+    object.ID || "",
+    object.title || "",
+    object.status || "",
+    object.description || "",
+    object.location || "",
+    object.start_date ? `"${String(object.start_date)}"` : "",
+    object.end_date ? `"${String(object.end_date)}"` : "",
+  ].map((v) => `"${v}"`).join(";") + "\n\n";
+
+  // Заголовки дефектов
+  csvContent += "ID дефекта;Название дефекта;Статус;Описание;Приоритет;Дедлайн\n";
+
+  filteredDefects.forEach((d) => {
+    csvContent += [
+      d.ID || d.id || "",
+      d.title || "",
+      d.status || "",
+      d.description || "",
+      d.priority || "",
+      d.deadline ? `"${String(d.deadline)}"` : "",
+    ].map((v) => `"${v}"`).join(";") + "\n";
+  });
+
+  // Добавляем BOM для русских символов
+  const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8" });
+  saveAs(blob, `Объект #${object.ID}.csv`);
+};
+
+
+  if (loading) return <p>Загрузка...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="profile-container">
@@ -84,6 +119,9 @@ export default function ObjectPage() {
               <option value="canceled">Отменён</option>
               <option value="completed">Завершён</option>
             </select>
+            <button className="adding-button" onClick={exportCSV}>
+              Экспорт CSV
+            </button>
           </div>
 
           {/* Информация об объекте */}
