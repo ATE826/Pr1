@@ -33,3 +33,12 @@ textarea{
     gap: 10%;
     margin-top: 20px;
 }
+
+@media (max-width: 1024px) {
+    .adding-button{
+    width: 100px;
+    height: 50px;
+    font-size: 14pt;
+    
+}
+}

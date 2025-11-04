@@ -6,11 +6,14 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
 // Защищённые страницы
+//import NotFound from "./pages/NotFoundPage"
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfilePage";
 import Objects from "./pages/ObjectsPage";
 import Defects from "./pages/DefectsPage";
 import AddObject from "./pages/AddObjectPage"
+import AddDefect from './pages/AddDefectPage';
+import EditObject from "./pages/EditObjectPage"
 
 function App() {
   const [token, setTokenState] = useState(localStorage.getItem("token"));
@@ -86,6 +89,23 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/:role/object/:id/edit-object"
+          element={
+            <ProtectedRoute>
+              <EditObject />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/:role/object/:id/add-defect"
+          element={
+            <ProtectedRoute>
+              <AddDefect />
+            </ProtectedRoute>
+          }
+        />
+        
 
         {/* Любой другой путь редиректит на login */}
         <Route path="*" element={<Navigate to="/login" />} />

@@ -52,12 +52,6 @@ export default function ObjectPage() {
           <div className="navbar-container">
             <div className="navbar-content">
               <p className="pageName">Объект #{object?.ID}</p>
-              <button
-                className="hrefToPage"
-                onClick={() => navigate(`/${role}/objects`)}
-              >
-                Назад
-              </button>
             </div>
           </div>
 
@@ -92,7 +86,6 @@ export default function ObjectPage() {
                         <div>
                           <h3>{defect.title}</h3>
                           <h4 className="title">{defect.status}</h4>
-                          <p>{defect.description}</p>
                         </div>
                       </div>
                     ))}
@@ -114,18 +107,30 @@ export default function ObjectPage() {
                 <div>
                   <button type="submit" className="adding-button" onClick={() => {
                     const role = localStorage.getItem("role");
+                    if (role !== "manager") {
+                      alert("У Вас нет прав на выпонение этого действия.");
+                      return;
+                    }
+                    navigate(`/${role}/object/${id}/edit-object`);
+                  }}>
+                    Изменить
+                  </button>
+                </div>
+                <div>
+                  <button type="submit" className="adding-button" onClick={() => {
+                    const role = localStorage.getItem("role");
                     if (role !== "engineer") {
                       alert("У Вас нет прав на выпонение этого действия.");
                       return;
                     }
-                    // Если роль manager — переход на страницу добавления объекта
-                    navigate(`/${role}/object/add-defect`);
+                    navigate(`/${role}/object/${id}/add-defect`);
                   }}>
                     Добавить дефект
                   </button>
                 </div>
               </div>
         </div>
+        
       </div>
     </div>
   );
