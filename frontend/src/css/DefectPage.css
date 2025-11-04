@@ -24,3 +24,15 @@
 .defect-details{
     margin-left: 5%;
 }
+
+.search-sort-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.sort-select{
+    margin-top: 20px;
+}
