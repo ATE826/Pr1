@@ -30,22 +30,22 @@ type ObjectInput struct {
 }
 
 type DefectInput struct {
-	Title       string `json:"title" binding:"required"`
-	Description string `json:"description" binding:"required"`
-	Status      string `json:"status" binding:"required,oneof=new in_progress checking canceled completed"`
-	Priority    string `json:"priority" binding:"required,oneof=low medium high"`
-	Deadline    string `json:"deadline" binding:"required,datetime=2006-01-02"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Status      string `json:"status" binding:"oneof=new in_progress checking canceled completed"`
+	Priority    string `json:"priority" binding:"oneof=low medium high -"`
+	Deadline    string `json:"deadline" binding:"datetime=2006-01-02"`
 	ObjectID    uint   `json:"object_id"`
 	EngineerID  uint   `json:"engineer_id"`
 }
 
 type DefectInputEditByEngineer struct {
-	Title       string `json:"title" binding:"required"`
-	Description string `json:"description" binding:"required"`
-	Status      string `json:"status" binding:"required,oneof=active completed archived"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Status      string `json:"status" binding:"oneof=new in_progress checking canceled completed"`
 }
 
 type DefectInputEditByManager struct {
-	Priority string `json:"priority" binding:"required,oneof=low medium high"`
-	Deadline string `json:"deadline" binding:"required,datetime=2006-01-02"`
+	Priority string `json:"priority" binding:"oneof=low medium high -"`
+	Deadline string `json:"deadline" binding:"datetime=2006-01-02"`
 }

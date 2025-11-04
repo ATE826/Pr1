@@ -56,6 +56,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	engineer.GET("/object/:object_id/defects", server.GetAllDefects)
 	engineer.GET("/object/:object_id/defect/:defect_id", server.GetDefectByID)
 	engineer.PATCH("/object/:object_id/defect/:defect_id", server.EditDefectByEngineer) // Изменение статуса, описания, названия
+	// engineer.PATCH("/object/:object_id/defect/:defect_id", server.EditDefect)
 
 	// ============ Менеджер ============
 
@@ -77,6 +78,7 @@ func SetupRouter(server *handlers.Server) *gin.Engine {
 	manager.GET("/object/:object_id/defects", server.GetAllDefects)
 	manager.GET("/object/:object_id/defect/:defect_id", server.GetDefectByID)
 	manager.PATCH("/object/:object_id/defect/:defect_id", server.EditDefectByManager) // Изменение приоритетности и дедлайна
+	// manager.PATCH("/object/:object_id/defect/:defect_id", server.EditDefect)
 	manager.DELETE("/object/:object_id/defect/:defect_id", server.DeleteDefect)
 
 	// ============ Заказчик ============

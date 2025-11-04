@@ -6,9 +6,7 @@ import "../css/AddObjectPage.css";
 export default function AddDefectPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState("medium");
   const [deadline, setDeadline] = useState("");
-  const [status, setStatus] = useState("new");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -27,14 +25,14 @@ export default function AddDefectPage() {
       const defectData = {
         title,
         description,
-        priority,
-        status,
+        status: "new",      // автоматически новый статус
+        priority: "-",      // автоматически низкий приоритет
         deadline: deadline || today,
       };
 
-      // ⚡ Правильный путь (совпадает с бэком)
       await API.post(`/engineer/object/${id}/defect`, defectData);
 
+      alert("Дефект успешно создан!");
       navigate(`/${role}/object/${id}`);
     } catch (err) {
       console.error("Ошибка при создании дефекта:", err);
@@ -73,52 +71,27 @@ export default function AddDefectPage() {
                 required
                 maxLength={150}
               />
-              <select
-                className="obj-input"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-              >
-                <option value="low">Низкий приоритет</option>
-                <option value="medium">Средний приоритет</option>
-                <option value="high">Высокий приоритет</option>
-              </select>
               <input
                 className="obj-input"
                 type="date"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
                 required
-                
               />
-              <select
-                className="obj-input"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="new">Новый</option>
-                <option value="in_progress">В работе</option>
-                <option value="checking">Проверка</option>
-                <option value="canceled">Отменён</option>
-                <option value="completed">Завершён</option>
-              </select>
 
               {error && <p className="error-message">{error}</p>}
 
               <div className="object-btns">
-                <div>
-                  <button
-                    type="button"
-                    className="logout-button"
-                    onClick={() => navigate(`/${role}/object/${id}`)}
-                  >
-                    Назад
-                  </button>
-                </div>
-                <div>
-                  <button type="submit" className="adding-button" disabled={isLoading}>
-                    {isLoading ? "Создание..." : "Создать дефект"}
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="logout-button"
+                  onClick={() => navigate(`/${role}/object/${id}`)}
+                >
+                  Назад
+                </button>
+                <button type="submit" className="adding-button" disabled={isLoading}>
+                  {isLoading ? "Создание..." : "Создать дефект"}
+                </button>
               </div>
             </form>
           </div>

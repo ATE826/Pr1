@@ -13,7 +13,10 @@ import Objects from "./pages/ObjectsPage";
 import Defects from "./pages/DefectsPage";
 import AddObject from "./pages/AddObjectPage"
 import AddDefect from './pages/AddDefectPage';
-import EditObject from "./pages/EditObjectPage"
+import EditObject from "./pages/EditObjectPage";
+import DefectInfo from "./pages/DefectInfo";
+import EditDefectByEngineer from "./pages/EditDefectByEngineerPage"
+import EditDefectByManager from "./pages/EditDefectByManagerPage"
 
 function App() {
   const [token, setTokenState] = useState(localStorage.getItem("token"));
@@ -105,7 +108,30 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+        <Route
+          path="/:role/object/:id/defect/:defectId"
+          element={
+            <ProtectedRoute>
+              <DefectInfo />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/:role/object/:id/defect/:defectId/defect-edit-engineer"
+          element={
+            <ProtectedRoute>
+              <EditDefectByEngineer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/:role/object/:id/defect/:defectId/defect-edit-manager"
+          element={
+            <ProtectedRoute>
+              <EditDefectByManager />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Любой другой путь редиректит на login */}
         <Route path="*" element={<Navigate to="/login" />} />
